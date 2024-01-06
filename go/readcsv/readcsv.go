@@ -7,11 +7,11 @@ import (
 	"log"
 	"strconv"
 	"strings"
-	"studentmodule/typestruct"
+	"studentmodule/models"
 )
 
-func ReadCsvFile(r *csv.Reader) []typestruct.Student {
-	students := []typestruct.Student{}
+func ReadCsvFile(r *csv.Reader) []models.Student {
+	students := []models.Student{}
 	const expectedRecord int = 9
 	lineCount := 0
 
@@ -52,7 +52,7 @@ func ReadCsvFile(r *csv.Reader) []typestruct.Student {
 		if err != nil {
 			fmt.Println(err)
 		}
-		students = append(students, typestruct.Student{
+		students = append(students, models.Student{
 			Lastname:  deleteQuotes(strings.TrimSpace(record[0])),
 			Firstname: deleteQuotes(strings.TrimSpace(record[1])),
 			SSN:       deleteQuotes(strings.TrimSpace(record[2])),

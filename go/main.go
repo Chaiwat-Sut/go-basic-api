@@ -2,45 +2,37 @@ package main
 
 import (
 	"encoding/csv"
-	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"studentmodule/dbmanage"
 	"studentmodule/jsonhandle"
+	"studentmodule/models"
 	"studentmodule/readcsv"
-	"studentmodule/typestruct"
+	"studentmodule/restapi"
 )
 
 func main() {
+	// Open Csv
 	csvfile, err := os.Open("../homework/api/rawdata/grades.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer csvfile.Close()
 
+	// Read Csv
 	r := csv.NewReader(csvfile)
 	r.LazyQuotes = true
 	students := readcsv.ReadCsvFile(r)
 
-	writeJsonFile(students)
-	database := dbmanage.InitDB()
-	students = jsonhandle.ReadJsonFile("../homework/json/students.json").([]typestruct.Student)
+	jsonhandle.WriteJsonFile(students)
+	students = jsonhandle.ReadJsonFile("../homework/json/students.json").([]models.Student)
 
 	for _, student := range students {
-		dbmanage.InsertStudentTable(student, database)
+		dbmanage.InsertStudentTable(student)
 	}
-}
 
-func writeJsonFile(students []typestruct.Student) {
-	file, err := os.Create("../homework/json/students.json")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	encoder := json.NewEncoder(file)
-	err = encoder.Encode(students)
-	if err != nil {
-		log.Fatal(err)
-	}
+	restapi.SetupDB()
+	restapi.SetupRoute("/api")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

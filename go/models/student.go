@@ -1,4 +1,4 @@
-package typestruct
+package models
 
 type Student struct {
 	Lastname  string  `json:"lastname"`
