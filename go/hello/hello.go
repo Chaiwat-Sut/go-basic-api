@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 type change struct {
 	Banknote int
 	Amount   int
@@ -22,9 +18,4 @@ func sell(price, pay int) []change {
 		}
 	}
 	return result
-}
-
-func main() {
-
-	fmt.Printf("%v\n", sell(50, 100))
 }
