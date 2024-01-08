@@ -28,6 +28,8 @@ func main() {
 	jsonhandle.WriteJsonFile(students)
 	students = jsonhandle.ReadJsonFile("../homework/json/students.json").([]models.Student)
 
+	dbmanage.InitDB()
+
 	for _, student := range students {
 		dbmanage.InsertStudentTable(student)
 	}
